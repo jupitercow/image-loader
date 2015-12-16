@@ -43,9 +43,6 @@ As a background image:
 		'lazy'       => false,
 		'mobile'     => $mobile,
 	) );
-	if ( $parallax_speed ) :
-		echo ' data-patch-speed="' . $parallax_speed . '"';
-	endif;
 ?>>
 ```
 
