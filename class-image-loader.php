@@ -9,7 +9,7 @@
  * Plugin Name:       Patchwerk Image Loader
  * Plugin URI:        https://wordpress.org/plugins/patch-image-loader/
  * Description:       Simply the process of loading images for mobile and desktop and lazy loading.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            Jupitercow
  * Author URI:        http://Jupitercow.com/
  * Contributor:       Jake Snyder
@@ -83,25 +83,28 @@ class Patch_Image_Loader
 	public function create_image( $args )
 	{
 		$defaults = array(
-			'alt'           => '',
-			'background'    => '',
-			'caption'       => '',
-			'class'         => '',
-			'data'          => null,
-			'desktop'       => '',
-			'height'        => null,
-			'image'         => '',
-			'img'           => '<img id="%s" class="%s" alt="%s"%s />',
-			'lazy'          => 'view',
-			'mobile'        => null,
-			'mobile_height' => null,
-			'mobile_width'  => null,
-			'noscript'      => '<noscript>%s</noscript>',
-			'opacity'       => false,
-			'post'          => null,
-			'width'         => null,
-			'spinner'       => get_template_directory_uri() . '/assets/img/loading.gif',
-			'styles'        => '',
+			'alt'            => '',
+			'background'     => false,
+			'caption'        => '',
+			'class'          => '',
+			'data'           => null,
+			'desktop'        => '',
+			'height'         => null,
+			'image'          => '',
+			'img'            => '<img id="%s" class="%s" alt="%s"%s />',
+			'lazy'           => 'view',
+			'mobile'         => null,
+			'mobile_height'  => null,
+			'mobile_width'   => null,
+			'noscript'       => '<noscript>%s</noscript>',
+			'opacity'        => null,
+			'parallax'       => false,
+			'parallax_bleed' => null,
+			'parallax_speed' => null,
+			'post'           => null,
+			'width'          => null,
+			'spinner'        => get_template_directory_uri() . '/assets/img/loading.gif',
+			'styles'         => '',
 		);
 		$args = wp_parse_args( $args, $defaults );
 		extract( $args );
@@ -118,6 +121,26 @@ class Patch_Image_Loader
 				'mobile'   => null,
 			),
 		);
+
+		// Add default data items
+		if ( is_array($data) )
+		{
+			$info['data'] = $data;
+		}
+
+		// If parallax is set, add the class and necessary data
+		if ( $parallax )
+		{
+			$info['class'] .= " parallax";
+			if ( $parallax_bleed )
+			{
+				$info['data']['bleed'] = $parallax_bleed;
+			}
+			if ( $parallax_speed )
+			{
+				$info['data']['speed'] = $parallax_speed;
+			}
+		}
 
 		// Add lazy load to data
 		if ( $lazy )

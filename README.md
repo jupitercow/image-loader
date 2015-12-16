@@ -1,5 +1,35 @@
 # Image Loader
 
+## About
+
+This is meant to be added into a theme. Specifically developed for Patchwerk from Jupitercow. The javascript should be loaded into your pages and the PHP class should be included.
+
+## Future
+
+Currently lazyload isn't really doing much, especially the in view portion. That support is next, followed by some advanced reveal animations.
+
+## Dependencies
+
+The javascript expects the below function to be defined in the global scope. In Patchwerk, it is at the top of the theme.js file.
+
+```
+/**
+ * Throttle Resize-triggered Events
+ * Wrap your actions in this function to throttle the frequency of firing them off, for better performance, esp. on mobile.
+ * ( source: http://stackoverflow.com/questions/2854407/javascript-jquery-window-resize-how-to-fire-after-the-resize-is-completed )
+ */
+var waitForFinalEvent = (function () {
+	var timers = {};
+	return function (callback, ms, uniqueId) {
+		if (!uniqueId) { uniqueId = "Don't call this twice without a uniqueId"; }
+		if (timers[uniqueId]) { clearTimeout (timers[uniqueId]); }
+		timers[uniqueId] = setTimeout(callback, ms);
+	};
+})();
+```
+
+If you want to change the refresh rate on scroll events, you can set this variable lower: `timeToWaitForLast`. If it is set globally, it will get used in the image-loader.js script.
+
 ## Example Usage
 
 As a background image:
@@ -19,7 +49,7 @@ As a background image:
 ?>>
 ```
 
-As an img:
+As an img tag:
 
 ```php
 <?php
@@ -53,80 +83,56 @@ As an img:
 * `data`
   * Description: Add extra data fields to the tag
   * type: array
-  * Default: array()
+  * Default: null
 * `desktop`
-  * Description: URL for desktop image
+  * Description: URL for desktop image, or when `image` or `post` are set, you can use this to set the desktop image size 
   * type: string
   * Default: ''
-* `height`
-  * Description: 
-  * type: 
-  * Default: 
 * `image`
-  * Description: 
-  * type: 
-  * Default: 
+  * Description: Pass an ACF image array, this would replace manually setting desktop and mobile images
+  * type: array
+  * Default: null
 * `img`
-  * Description: 
-  * type: 
-  * Default: 
+  * Description: The format for the img tag
+  * type: string
+  * Default: '<img id="%s" class="%s" alt="%s"%s />'
 * `lazy`
-  * Description: 
-  * type: 
-  * Default: 
+  * Description: Turn on lazy loading, options are: false/true, 'view' (load when in view)
+  * type: boolean|string
+  * Default: 'view'
 * `mobile`
-  * Description: 
-  * type: 
-  * Default: 
-* `mobile_height`
-  * Description: 
-  * type: 
-  * Default: 
-* `mobile_width`
-  * Description: 
-  * type: 
-  * Default: 
+  * Description: URL for mobile image, or when `image` or `post` are set, you can use this to set the mobile image size
+  * type: string
+  * Default: ''
 * `noscript`
-  * Description: 
-  * type: 
-  * Default: 
+  * Description: Format for noscript
+  * type: string
+  * Default: '<noscript>%s</noscript>'
 * `opacity`
-  * Description: 
-  * type: 
-  * Default: 
+  * Description: Set the opacity of the background image, useful if you want to darken or lighten the image using the background color
+  * type: integer
+  * Default: null
+* `parallax`
+  * Description: Turn on parallax for background images, requires the parallax.js library
+  * type: boolean
+  * Default: false
+* `parallax_bleed`
+  * Description: Set the overlap for parallax, how much room above and below to move
+  * type: integer
+  * Default: 10
+* `parallax_speed`
+  * Description: Set the speed for parallax
+  * type: integer
+  * Default: 0.7
 * `post`
-  * Description: 
-  * type: 
-  * Default: 
-* `width`
-  * Description: 
-  * type: 
-  * Default: 
+  * Description: A post ID, when set, will grab the featured image from the post
+  * type: integer|object
+  * Default: null
 * `spinner`
-  * Description: 
-  * type: 
-  * Default: 
+  * Description: Location for a loading spinner animation
+  * type: string
+  * Default: get_template_directory_uri() . '/assets/img/loading.gif'
 * `styles`
-  * Description: 
-  * type: 
-  * Default: 
-
-			'alt'           => '',
-			'background'    => '',
-			'caption'       => '',
-			'class'         => '',
-			'data'          => null,
-			'desktop'       => '',
-			'height'        => null,
-			'image'         => '',
-			'img'           => '<img id="%s" class="%s" alt="%s"%s />',
-			'lazy'          => 'view',
-			'mobile'        => null,
-			'mobile_height' => null,
-			'mobile_width'  => null,
-			'noscript'      => '<noscript>%s</noscript>',
-			'opacity'       => false,
-			'post'          => null,
-			'width'         => null,
-			'spinner'       => get_template_directory_uri() . '/assets/img/loading.gif',
-			'styles'        => '',
+  * Description: Add extra styles to be outputted in the styles attribute
+  * type: string
+  * Default: ''

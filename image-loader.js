@@ -4,6 +4,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		patch.mobile_breakpoint = 768;
 	}
 
+	if ( ! timeToWaitForLast ) {
+		var timeToWaitForLast = 100
+	}
+
 	var loadType  = 'desktop',
 		images    = document.querySelectorAll('.patch-load:not(.patch-loaded):not([data-patch-load-lazy=view])'),
 		main_args = {
@@ -49,8 +53,8 @@ document.addEventListener('DOMContentLoaded', function() {
 		{
 			if ( el.classList.contains('parallax') && 'mobile' !== elLoadType && 'undefined' !== typeof jQuery )
 			{
-				var bleed = el.getAttribute('data-patch-bleed'),
-					speed = el.getAttribute('data-patch-speed');
+				var bleed = el.getAttribute('data-patch-load-bleed'),
+					speed = el.getAttribute('data-patch-load-speed');
 
 				if ( bleed ) { paraArgs.bleed = bleed; }
 				if ( speed ) { paraArgs.speed = speed; }
