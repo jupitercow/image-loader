@@ -50,7 +50,7 @@ As a background image:
 ?>>
 ```
 
-As an <img/> tag:
+As an img tag:
 
 ```php
 <?php
