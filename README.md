@@ -37,24 +37,52 @@ As a background image:
 ```php
 <div<?php
 	do_action('patch/image', array(
-		'background' => true,
-		'class'      => $class,
-		'desktop'    => $desktop,
-		'lazy'       => false,
-		'mobile'     => $mobile,
+		'background'     => true,
+		'class'          => $class,
+		'desktop'        => $desktop_url,
+		'lazy'           => false,
+		'mobile'         => $mobile_url,
+		'opacity'        => .8,
+		'parallax'       => true,
+		'parallax_bleed' => 10,
+		'parallax_speed' => .7,
 	) );
 ?>>
 ```
 
-As an img tag:
+As an <img/> tag:
 
 ```php
 <?php
 	do_action('patch/image', array(
-		'alt'        => esc_attr($image['alt']),
-		'desktop'    => $image['sizes']['gallery-main'],
+		'alt'        => 'Photo description',
+		'desktop'    => $desktop_url,
 		'lazy'       => true,
-		'mobile'     => $image['sizes']['gallery-main'],
+		'mobile'     => $mobile_url,
+	) );
+?>
+```
+
+ACF array:
+
+```php
+<?php
+	do_action('patch/image', array(
+		'desktop'    => 'desktop-size',
+		'mobile'     => 'mobile-size',
+		'image'      => get_field('image_field'),
+	) );
+?>
+```
+
+Post:
+
+```php
+<?php
+	do_action('patch/image', array(
+		'desktop'    => 'desktop-size',
+		'mobile'     => 'mobile-size',
+		'image'      => $post_id,
 	) );
 ?>
 ```
